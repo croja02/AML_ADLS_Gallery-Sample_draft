@@ -1,0 +1,104 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+		"unique":{
+			"type":"string",
+			"defaultValue":"cdr1",
+			"metadata":{
+				"description":"Prefix for deployed resources."
+			}
+		},
+		"location": {
+			"type": "string",
+			"defaultValue": "West US",
+			"allowedValues": [
+				"Central US",
+				"East US",
+				"East US 2",
+				"South Central US",
+				"West Europe",
+				"West US"
+			],
+			"metadata": {
+                "description": "Location to deploy resources"
+			}
+		},
+		"storageLocation": {
+			"type": "string",
+			"defaultValue": "Central US",
+			"allowedValues": [
+				"Central US",
+				"East US",
+				"East US 2",
+				"South Central US",
+				"West Europe",
+				"West US"
+			],
+			"metadata": {
+                "description": "Storage location"
+			}
+		},
+		"solAccType": {
+            "type": "string",
+            "defaultValue": "personal",
+            "allowedValues": [
+                "personal",
+                "predictive",
+                "mbl",
+				"other"
+            ]
+        }
+	},
+    "variables": {
+        "solutionAccSettings": {
+            "personal": {
+                "title": "personal"
+            }
+		},
+        "currentSolAccSettings": "[variables('solutionAccSettings')[parameters('solAccType')]]",
+        "paramVars": {
+            "location": "[parameters('location')]",
+            "accountType": "Standard-RAGRS",
+            "scriptContainer": "scriptcontainer"
+        },
+        "settings": {
+            "apiVersion": {
+                "storageAccountApiVersion": "2014-06-01",
+                "serviceBusApiVersion": "2014-09-01",
+                "asaApiVersion": "2015-09-01",
+                "azureMLApiVersion": "2015-09-01",
+                "dataFactoryApiVersion": "2015-09-01"
+            },
+            "asaSettings": {
+                "asaJobName": "[concat(variables('currentSolAccSettings').title,'streamanalytics',parameters('unique'))]",
+                "asaLocation": "[parameters('location')]",
+                "asaBlobContainer": "[concat(variables('currentSolAccSettings').title,'stream')]",
+                "asaBlobPathPattern": "rawdata/{date}/{time}"
+            },
+            "storageSettings": {
+                "storageAccountName": "[concat(variables('currentSolAccSettings').title,'storeage',parameters('unique'))]"
+            },
+            "serviceBusSettings": {
+                "serviceBusNamespaceName": "[concat(variables('currentSolAccSettings').title,'servicebus',parameters('unique'))]",
+                "serviceBusIngestEventHubName": "[concat(variables('currentSolAccSettings').title,'eventhub',parameters('unique'))]",
+                "serviceBusSharedAccessPolicyName": "RootManageSharedAccessKey"
+            }
+        }
+    },
+	"resources": [ 
+		{
+            "apiVersion": "[variables('settings')['apiVersion'].storageAccountApiVersion]",
+            "type": "Microsoft.ClassicStorage/StorageAccounts",
+            "name": "[variables('settings')['storageSettings'].storageAccountName]",
+            "location": "[parameters('storagelocation')]",
+            "properties": {
+                "accountType": "[variables('paramVars').accountType]"
+            },
+            "metadata": {
+                "description": "Create the Azure Storage Account"
+            }
+        }
+  ],
+  "outputs": {  }
+}
