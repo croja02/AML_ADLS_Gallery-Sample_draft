@@ -6,14 +6,6 @@
 			"type": "string" 
 			"defaultValue":"testcdrstorageaccount",
 		},
-		
-		"unique":{
-			"type":"string",
-			"defaultValue":"cdr1",
-			"metadata":{
-				"description":"Prefix for deployed resources."
-			}
-		},
 		"location": {
 			"type": "string",
 			"defaultValue": "West US",
@@ -44,65 +36,57 @@
                 "description": "Storage location"
 			}
 		},
-		"solAccType": {
-            "type": "string",
-            "defaultValue": "personal",
-            "allowedValues": [
-                "personal",
-                "predictive",
-                "mbl",
-				"other"
-            ]
-        }
+		"serviceBusNamespaceName": {
+		  "type": "string",
+		  "metadata": {
+			"description": "Name of the Service Bus Namespace"
+		  }
+		},
+		"serviceBusQueueName": {
+		  "type": "string",
+		  "metadata": {
+			"description": "Name of the Service Bus Queue"
+		  }
+		}
 	},
     "variables": {
+		"sbVersion": "2015-08-01",
+		"storageAccountVersion" : "2015-01-01",
 		"storageAccountType": "Standard_LRS",
-	
-        "solutionAccSettings": {
-            "personal": {
-                "title": "personal"
-            }
-		},
-        "currentSolAccSettings": "[variables('solutionAccSettings')[parameters('solAccType')]]",
-        "paramVars": {
-            "location": "[parameters('location')]",
-            "accountType": "Standard-RAGRS",
-            "scriptContainer": "scriptcontainer"
-        },
-        "settings": {
-            "apiVersion": {
-                "storageAccountApiVersion": "2014-06-01",
-                "serviceBusApiVersion": "2014-09-01",
-                "asaApiVersion": "2015-09-01",
-                "azureMLApiVersion": "2015-09-01",
-                "dataFactoryApiVersion": "2015-09-01"
-            },
-            "asaSettings": {
-                "asaJobName": "[concat(variables('currentSolAccSettings').title,'streamanalytics',parameters('unique'))]",
-                "asaLocation": "[parameters('location')]",
-                "asaBlobContainer": "[concat(variables('currentSolAccSettings').title,'stream')]",
-                "asaBlobPathPattern": "rawdata/{date}/{time}"
-            },
-            "storageSettings": {
-                "storageAccountName": "[concat(variables('currentSolAccSettings').title,'storeage',parameters('unique'))]"
-            },
-            "serviceBusSettings": {
-                "serviceBusNamespaceName": "[concat(variables('currentSolAccSettings').title,'servicebus',parameters('unique'))]",
-                "serviceBusIngestEventHubName": "[concat(variables('currentSolAccSettings').title,'eventhub',parameters('unique'))]",
-                "serviceBusSharedAccessPolicyName": "RootManageSharedAccessKey"
-            }
-        }
     },
-	"resources": [ 
+	"resources": 
+	[ 
 	    {
-            "apiVersion": "2015-05-01-preview",
+            "apiVersion": "[variables('storageAccountVersion')]",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageAccountName')]",
-            "location": "[storageLocation('storageLocation')]",
+            "location": "[parameters('storageLocation')]",
             "properties": {
                 "accountType": "[variables('storageAccountType')]"
             }
-        }
+        },
+		{
+			"apiVersion": "[variables('sbVersion')]",
+			"name": "[parameters('serviceBusNamespaceName')]",
+			"type": "Microsoft.ServiceBus/namespaces",
+			"location": "[resourceGroup().location]",
+			"properties": {
+			},
+			"resources": 
+			[
+				{
+					"apiVersion": "[variables('sbVersion')]",
+					"name": "[parameters('serviceBusQueueName')]",
+					"type": "Queues",
+					"dependsOn": 
+					[
+						"[concat('Microsoft.ServiceBus/namespaces/', parameters('serviceBusNamespaceName'))]"
+					],
+					"properties": {},
+					"resources": []
+				}
+			]
+		}
   ],
   "outputs": {  }
 }
