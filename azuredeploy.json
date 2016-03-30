@@ -3,8 +3,8 @@
   "contentVersion": "1.0.0.0",
   "parameters": { 
         "storageAccountName": { 
-			"type": "string" 
-			"defaultValue":"testcdrstorageaccount",
+			"type": "string", 
+			"defaultValue":"testcdrstorageaccount"
 		},
 		"location": {
 			"type": "string",
@@ -52,7 +52,7 @@
     "variables": {
 		"sbVersion": "2015-08-01",
 		"storageAccountVersion" : "2015-01-01",
-		"storageAccountType": "Standard_LRS",
+		"storageAccountType": "Standard_LRS"
     },
 	"resources": 
 	[ 
