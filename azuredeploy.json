@@ -98,6 +98,33 @@
             "metadata": {
                 "description": "Create the Azure Storage Account"
             }
+        },
+		{
+            "apiVersion": "[variables('settings')['apiVersion'].serviceBusApiVersion]",
+            "type": "Microsoft.EventHub/namespaces",
+            "name": "[variables('settings')['serviceBusSettings'].serviceBusNamespaceName]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "region": "[parameters('location')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "[variables('settings')['apiVersion'].serviceBusApiVersion]",
+                    "type": "eventHubs",
+                    "name": "[variables('settings')['serviceBusSettings'].serviceBusIngestEventHubName]",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [ "[concat('Microsoft.EventHub/namespaces/', variables('settings')['serviceBusSettings'].serviceBusNamespaceName)]" ],
+                    "properties": {
+                        "path": "[variables('settings')['serviceBusSettings'].serviceBusIngestEventHubName]"
+                    },
+                    "metadata": {
+                        "description": "Create the Event Hub"
+                    }
+                }
+            ],
+            "metadata": {
+                "description": "Create the Event Hub Namespace"
+            }
         }
   ],
   "outputs": {  }
