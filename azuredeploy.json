@@ -2,6 +2,11 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": { 
+        "storageAccountName": { 
+			"type": "string" 
+			"defaultValue":"testcdrstorageaccount",
+		},
+		
 		"unique":{
 			"type":"string",
 			"defaultValue":"cdr1",
@@ -51,6 +56,8 @@
         }
 	},
     "variables": {
+		"storageAccountType": "Standard_LRS",
+	
         "solutionAccSettings": {
             "personal": {
                 "title": "personal"
@@ -87,43 +94,13 @@
         }
     },
 	"resources": [ 
-		{
-            "apiVersion": "[variables('settings')['apiVersion'].storageAccountApiVersion]",
-            "type": "Microsoft.ClassicStorage/StorageAccounts",
-            "name": "[variables('settings')['storageSettings'].storageAccountName]",
-            "location": "[parameters('storagelocation')]",
+	    {
+            "apiVersion": "2015-05-01-preview",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[storageLocation('storageLocation')]",
             "properties": {
-                "accountType": "[variables('paramVars').accountType]"
-            },
-            "metadata": {
-                "description": "Create the Azure Storage Account"
-            }
-        },
-		{
-            "apiVersion": "[variables('settings')['apiVersion'].serviceBusApiVersion]",
-            "type": "Microsoft.EventHub/namespaces",
-            "name": "[variables('settings')['serviceBusSettings'].serviceBusNamespaceName]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "region": "[parameters('location')]"
-            },
-            "resources": [
-                {
-                    "apiVersion": "[variables('settings')['apiVersion'].serviceBusApiVersion]",
-                    "type": "eventHubs",
-                    "name": "[variables('settings')['serviceBusSettings'].serviceBusIngestEventHubName]",
-                    "location": "[parameters('location')]",
-                    "dependsOn": [ "[concat('Microsoft.EventHub/namespaces/', variables('settings')['serviceBusSettings'].serviceBusNamespaceName)]" ],
-                    "properties": {
-                        "path": "[variables('settings')['serviceBusSettings'].serviceBusIngestEventHubName]"
-                    },
-                    "metadata": {
-                        "description": "Create the Event Hub"
-                    }
-                }
-            ],
-            "metadata": {
-                "description": "Create the Event Hub Namespace"
+                "accountType": "[variables('storageAccountType')]"
             }
         }
   ],
