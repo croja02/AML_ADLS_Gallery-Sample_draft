@@ -50,7 +50,7 @@
             }
         },
 		{
-			"apiVersion": "[variables('sbVersion')]",
+			"apiVersion": "[variables('serviceBusApiVersion')]",
 			"name": "[parameters('serviceBusNamespaceName')]",
 			"type": "Microsoft.ServiceBus/namespaces",
 			"location": "[resourceGroup().location]",
@@ -59,7 +59,7 @@
 			"resources": 
 			[
 				{
-					"apiVersion": "[variables('sbVersion')]",
+					"apiVersion": "[variables('serviceBusApiVersion')]",
 					"name": "[parameters('serviceBusQueueName')]",
 					"type": "Queues",
 					"dependsOn": 
