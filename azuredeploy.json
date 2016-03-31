@@ -35,7 +35,7 @@
 	},
     "variables": {
 		"serviceBusApiVersion": "2014-09-01",
-		"storageAccountVersion" : "2015-08-01",
+		"storageAccountVersion" : "2015-06-15",
 		"storageAccountType": "Standard_LRS"
     },
 	"resources": 
