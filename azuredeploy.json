@@ -8,9 +8,8 @@
 		},
 		"location": {
 			"type": "string",
-			"defaultValue": "Central US",
+			"defaultValue": "West US",
 			"allowedValues": [
-				"Central US",
 				"East US",
 				"East US 2",
 				"South Central US",
@@ -35,8 +34,8 @@
 		}
 	},
     "variables": {
-		"sbVersion": "2015-08-01",
-		"storageAccountVersion" : "2015-01-01",
+		"sbVersion": "2016-01-01",
+		"storageAccountVersion" : "2016-01-01",
 		"storageAccountType": "Standard_LRS"
     },
 	"resources": 
