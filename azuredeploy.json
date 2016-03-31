@@ -8,21 +8,6 @@
 		},
 		"location": {
 			"type": "string",
-			"defaultValue": "West US",
-			"allowedValues": [
-				"Central US",
-				"East US",
-				"East US 2",
-				"South Central US",
-				"West Europe",
-				"West US"
-			],
-			"metadata": {
-                "description": "Location to deploy resources"
-			}
-		},
-		"storageLocation": {
-			"type": "string",
 			"defaultValue": "Central US",
 			"allowedValues": [
 				"Central US",
@@ -60,7 +45,7 @@
             "apiVersion": "[variables('storageAccountVersion')]",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageAccountName')]",
-            "location": "[parameters('storageLocation')]",
+            "location": "[parameters('location')]",
             "properties": {
                 "accountType": "[variables('storageAccountType')]"
             }
