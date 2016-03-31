@@ -34,7 +34,7 @@
 		}
 	},
     "variables": {
-		"sbVersion": "2016-01-01",
+		"sbVersion": "2015-08-01",
 		"storageAccountVersion" : "2016-01-01",
 		"storageAccountType": "Standard_LRS"
     },
