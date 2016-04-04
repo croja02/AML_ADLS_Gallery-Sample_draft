@@ -155,9 +155,10 @@
 						"Properties": {
 						    "type": "AzureBlob",
 							"typeProperties": {
-								"folderPath": "cdrdata/aggregate",
+								"folderPath": "cdrdata/input",
 								"format": {
 									"type": "TextFormat",
+									"serialization": "CSV",
 									"rowDelimiter": "\n",
 									"columnDelimiter": ","
 								}
