@@ -128,7 +128,6 @@
                         "name": "cdrhubInput",
                         "properties": {
                             "type": "stream",
-                            "serialization": "JSON",
                             "datasource": {
                                 "type": "Microsoft.ServiceBus/EventHub",
                                 "properties": {
@@ -136,7 +135,8 @@
                                     "ServiceBusNamespace": "[variables('settings')['serviceBusSettings'].serviceBusNamespaceName]",
                                     "SharedAccessPolicyName": "[variables('settings')['serviceBusSettings'].serviceBusSharedAccessPolicyName]",
                                     "SharedAccessPolicyKey": "[listKeys(resourceid('Microsoft.Eventhub/namespaces/authorizationRules',variables('settings')['serviceBusSettings'].serviceBusNamespaceName,variables('settings')['serviceBusSettings'].serviceBusSharedAccessPolicyName ), variables('settings')['apiVersion'].serviceBusApiVersion).primaryKey]",
-                                    "SourcePartitionCount": 16
+                                    "SourcePartitionCount": 16,
+									"serialization": "JSON"
                                 }
                             }
                         }
