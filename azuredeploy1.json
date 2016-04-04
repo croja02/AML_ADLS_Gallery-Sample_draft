@@ -128,6 +128,12 @@
                         "name": "cdrhubInput",
                         "properties": {
                             "type": "stream",
+							"serialization":{  
+							  "type":"JSON",
+							  "properties":{  
+								 "encoding":"UTF8"
+							  }
+						   },
                             "datasource": {
                                 "type": "Microsoft.ServiceBus/EventHub",
                                 "properties": {
@@ -135,8 +141,7 @@
                                     "ServiceBusNamespace": "[variables('settings')['serviceBusSettings'].serviceBusNamespaceName]",
                                     "SharedAccessPolicyName": "[variables('settings')['serviceBusSettings'].serviceBusSharedAccessPolicyName]",
                                     "SharedAccessPolicyKey": "[listKeys(resourceid('Microsoft.Eventhub/namespaces/authorizationRules',variables('settings')['serviceBusSettings'].serviceBusNamespaceName,variables('settings')['serviceBusSettings'].serviceBusSharedAccessPolicyName ), variables('settings')['apiVersion'].serviceBusApiVersion).primaryKey]",
-                                    "SourcePartitionCount": 16,
-									"serialization": "JSON"
+                                    "SourcePartitionCount": 16
                                 }
                             }
                         }
@@ -154,13 +159,16 @@
 						"Name": "cdrhubOutput",
 						"Properties": {
 						    "type": "AzureBlob",
+						    "folderPath": "cdrdata/input",
 							"typeProperties": {
-								"folderPath": "cdrdata/input",
 								"format": {
 									"type": "TextFormat",
-									"serialization": "CSV",
-									"rowDelimiter": "\n",
-									"columnDelimiter": ","
+									"serialization":{  
+										  "type":"CSV",
+										  "properties":{  
+											 "encoding":"UTF8"
+										  }
+								   }
 								}
 							}
 						}
