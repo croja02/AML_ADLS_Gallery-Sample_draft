@@ -168,7 +168,7 @@
                 ]
             },
             "metadata": {
-                "description": "Create the Stream Analytics Resource"
+                "description": "Create a Stream Analytics Resource"
             }
         }
     ]
