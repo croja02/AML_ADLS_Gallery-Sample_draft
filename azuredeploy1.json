@@ -158,17 +158,19 @@
 					{
 						"Name": "cdrhubOutput",
 						"Properties": {
-						    "type": "AzureBlob",
-						    "folderPath": "cdrdata/input",
-							"typeProperties": {
-								"format": {
-									"type": "TextFormat",
-									"serialization":{  
-										  "type":"CSV",
-										  "properties":{  
-											 "encoding":"UTF8"
-										  }
-								   }
+							"datasource":{
+								"type": "AzureBlob",
+								"folderPath": "cdrdata/input",
+								"typeProperties": {
+									"format": {
+										"type": "TextFormat",
+										"serialization":{  
+											  "type":"CSV",
+											  "properties":{  
+												 "encoding":"UTF8"
+											  }
+									   }
+									}
 								}
 							}
 						}
