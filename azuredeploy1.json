@@ -39,28 +39,7 @@
     "variables": {
         "solutionAccSettings": {
             "personal": {
-                "title": "personal",
-                "datafactorySettings": {
-                    "ETLHiveActivityQuery": "ETLQuery.hql",
-                    "inputSerilization": {
-						"type": "CSV",
-                        "properties": {
-							"fieldDelimiter": ",",
-                            "encoding": "UTF8"
-                        }
-                    },
-					"outputSerilization": {
-                        "type": "CSV",
-                        "properties": {
-                            "fieldDelimiter": ",",
-                            "encoding": "UTF8"
-                        }
-                    }
-                },
-                "azureMLSettings": {
-                    "azureMLEndpoint": "https://ussouthcentral.services.azureml.net/workspaces/1cb6843a931244a08611cf85ab3455d4/services/7adcfa540a56493dacbadeb9340ad3d3/jobs",
-                    "azureMLApiKey": "oop61dNlOmFiN/FH1SbllC2eQo6Cv42QYufnufePtkwx55xJPJETsj6oWIy8W+lktVHHUwteiwjauec+bq7rdg=="
-                }
+                "title": "personal"
             }
 		},
         "currentSolAccSettings": "[variables('solutionAccSettings')[parameters('solAccType')]]",
@@ -78,17 +57,17 @@
                 "dataFactoryApiVersion": "2015-09-01"
             },
             "asaSettings": {
-                "asaJobName": "[concat(variables('currentSolAccSettings').title,'streamanalytics',parameters('unique'))]",
+                "asaJobName": "[concat('cdrstreamanalytics',parameters('unique'))]",
                 "asaLocation": "[parameters('location')]",
-                "asaBlobContainer": "[concat(variables('currentSolAccSettings').title,'cdrdata')]",
+                "asaBlobContainer": "[concat('cdrdata')]",
                 "asaBlobPathPattern": "input/{date}/{time}"
             },
             "storageSettings": {
-                "storageAccountName": "[concat(variables('currentSolAccSettings').title,'storeage',parameters('unique'))]"
+                "storageAccountName": "[concat('cdrstoreageaccount',parameters('unique'))]"
             },
             "serviceBusSettings": {
-                "serviceBusNamespaceName": "[concat(variables('currentSolAccSettings').title,'servicebus',parameters('unique'))]",
-                "serviceBusIngestEventHubName": "[concat(variables('currentSolAccSettings').title,'eventhub',parameters('unique'))]",
+                "serviceBusNamespaceName": "[concat('cdrservicebus',parameters('unique'))]",
+                "serviceBusIngestEventHubName": "[concat('cdrdatahub',parameters('unique'))]",
                 "serviceBusSharedAccessPolicyName": "RootManageSharedAccessKey"
             }
         }
@@ -149,7 +128,7 @@
                         "name": "cdrhubInput",
                         "properties": {
                             "type": "stream",
-                            "serialization": "[variables('currentSolAccSettings')['datafactorySettings'].inputSerilization]",
+                            "serialization": "JSON",
                             "datasource": {
                                 "type": "Microsoft.ServiceBus/EventHub",
                                 "properties": {
@@ -172,18 +151,17 @@
                 },
                 "outputs": [
 					{
-						"Name": "OutputSQL",
+						"Name": "cdrhubOutput",
 						"Properties": {
-							"DataSource": {
-								"Properties": {
-									"Database": "[variables('settings')['sqlSettings'].sqlDatabaseName]",
-									"Password": "[variables('settings')['sqlSettings'].sqlServerPassword]",
-									"Server": "[variables('settings')['sqlSettings'].sqlServerName]",
-									"Table": "Ratings",
-									"User": "[variables('settings')['sqlSettings'].sqlServerUserName]"
-								},
-								"Type": "Microsoft.Sql/Server/Database"
-                            }
+						    "type": "AzureBlob",
+							"typeProperties": {
+								"folderPath": "cdrdata/aggregate",
+								"format": {
+									"type": "TextFormat",
+									"rowDelimiter": "\n",
+									"columnDelimiter": ","
+								}
+							}
 						}
                     }
                 ]
