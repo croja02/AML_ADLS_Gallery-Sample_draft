@@ -8,11 +8,11 @@ Previous approaches forced all data into a common predetermined schema, or data 
 Figure 1 and figure 2 below illustrates 
 
 <br/>
-![](media/non_ADLS_Analysis.png)
+![](media/non_ADLS_analysis.png)
 <br/>
 Figure 1: Traditional Data Management and Analysis
 <br/>
-![](media/ADLS_Analysis.png)
+![](media/ADLS_analysis.png)
 <br/>
 Figure 2: Data Management and Analysis in an Azure Data Lake Environment. 
 
